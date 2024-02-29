@@ -14,7 +14,6 @@ class Program
         {
             students.Add(new Student
             {
-
                 StudentNumber = random.Next(100,999),
                 Name = string.Empty,
                 Surname = string.Empty
