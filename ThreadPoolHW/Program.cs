@@ -14,14 +14,15 @@ class Program
         {
             students.Add(new Student
             {
-                StudentNumber = random.Next(100,999),
+                StudentNumber = random.Next(1,50),
                 Name = string.Empty,
                 Surname = string.Empty
             });
         }
 
 
-        Timer timer = new Timer(ShowThreadPoolInfo, null, 1000, 1000);
+        Timer 
+        timer = new Timer(ShowLoadingProgress, null, 1000, 1000);
         Task[] tasks = new Task[30];
         TaskScheduler scheduler = null;
         scheduler = TaskScheduler.Default;
@@ -34,7 +35,7 @@ class Program
             tasks[i] = new Task(() => {
                 Thread.Sleep(2000);
                 SearchStudent(0);
-                ShowLoadingProgressCallback(0);
+                
             });
             tasks[i].Start();
 
@@ -47,15 +48,16 @@ class Program
 
     }
 
-    static void ShowLoadingProgressCallback(object _)
+    static void ShowLoadingProgress(object _)
     {
         Console.Write("Loading ");
+        string a = "";
         for (int i = 0; i < 20; i++)
         {
-            Console.Write("|");
+            a+="|";
             Thread.Sleep(100); 
         }
-        Console.WriteLine();
+        Console.WriteLine(a);
         Console.WriteLine($"Loading task ID: {Task.CurrentId}, Thread ID: {Thread.CurrentThread.ManagedThreadId}");
     }
 
@@ -71,7 +73,7 @@ class Program
 
 static void SearchStudent(object _)
     {
-        int studentNumber = 457;
+        int studentNumber = -9;
         Console.WriteLine($"Search task ID: {Task.CurrentId}, Thread ID: {Thread.CurrentThread.ManagedThreadId}");
 
         foreach (var student in students)
