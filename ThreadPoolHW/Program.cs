@@ -21,21 +21,30 @@ class Program
         }
 
 
-        Timer 
-        timer = new Timer(ShowLoadingProgress, null, 1000, 1000);
+        Timer timer = new Timer(ShowThreadPoolInfo, null, 1000, 1000);
         Task[] tasks = new Task[30];
+        Task[] tasks2 = new Task[30];
         TaskScheduler scheduler = null;
         scheduler = TaskScheduler.Default;
 
-        //int numb=765;
-        //Console.WriteLine("Enter student number: ");
-        //numb = Convert.ToInt32(Console.ReadLine());
+        for (int i = 0; i < tasks2.Length; i++)
+        {
+            tasks2[i] = new Task(() => {
+                Thread.Sleep(2000);
+                ShowLoadingProgress(0);
+                
+            });
+            tasks2[i].Start();
+
+        }
+
         for (int i = 0; i < tasks.Length; i++)
         {
             tasks[i] = new Task(() => {
                 Thread.Sleep(2000);
                 SearchStudent(0);
-                
+              
+
             });
             tasks[i].Start();
 
@@ -47,6 +56,7 @@ class Program
         Console.ReadLine();
 
     }
+ 
 
     static void ShowLoadingProgress(object _)
     {
@@ -58,7 +68,7 @@ class Program
             Thread.Sleep(100); 
         }
         Console.WriteLine(a);
-        Console.WriteLine($"Loading task ID: {Task.CurrentId}, Thread ID: {Thread.CurrentThread.ManagedThreadId}");
+        Console.WriteLine($"Loading task ID: {Task.CurrentId}, Thread ID: {Thread.CurrentThread.ManagedThreadId}, iz pula potokov {Thread.CurrentThread.IsThreadPoolThread}");
     }
 
     public static void ShowThreadPoolInfo(object _)
@@ -74,7 +84,7 @@ class Program
 static void SearchStudent(object _)
     {
         int studentNumber = -9;
-        Console.WriteLine($"Search task ID: {Task.CurrentId}, Thread ID: {Thread.CurrentThread.ManagedThreadId}");
+        Console.WriteLine($"Search task ID: {Task.CurrentId}, Thread ID: {Thread.CurrentThread.ManagedThreadId}, iz pula potokov {Thread.CurrentThread.IsThreadPoolThread}");
 
         foreach (var student in students)
         {

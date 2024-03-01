@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ThreadPoolHW
 {
-    public class ThreadTaskScheduler : TaskScheduler
+    public class ThreadTaskScheduler : TaskScheduler 
     {
         protected override IEnumerable<Task>? GetScheduledTasks()
         {
@@ -18,7 +18,7 @@ namespace ThreadPoolHW
             new Thread(() => TryExecuteTask(task)) { IsBackground = true }.Start();
         }
 
-        protected override bool TryExecuteTaskInline(Task task, bool taskWasPreviouslyQueued)
+        public override bool TryExecuteTaskInline(Task task, bool taskWasPreviouslyQueued)
         {
             return TryExecuteTask(task);
         }
