@@ -4,6 +4,8 @@ using ThreadPoolHW;
 
 class Program
 {
+    static TaskScheduler scheduler = null;
+    
       static  List<Student> students = new List<Student>();
     static void Main()
     {
@@ -22,42 +24,30 @@ class Program
 
 
         Timer timer = new Timer(ShowThreadPoolInfo, null, 1000, 1000);
-        Task[] tasks = new Task[30];
-        Task[] tasks2 = new Task[30];
-        TaskScheduler scheduler = null;
         scheduler = TaskScheduler.Default;
 
-        for (int i = 0; i < tasks2.Length; i++)
-        {
-            tasks2[i] = new Task(() => {
-                Thread.Sleep(2000);
-                ShowLoadingProgress(0);
-                
-            });
-            tasks2[i].Start();
+        Task[] loadingTasks = new Task[30];
+        Task[] searchTasks = new Task[30];
 
-        }
+        Task.Factory.StartNew(() => RunTasks(), CancellationToken.None, TaskCreationOptions.None, scheduler);
 
-        for (int i = 0; i < tasks.Length; i++)
-        {
-            tasks[i] = new Task(() => {
-                Thread.Sleep(2000);
-                SearchStudent(0);
-              
 
-            });
-            tasks[i].Start();
-
-        }
-        Task.WaitAll(tasks);
+        
         Thread.Sleep(2000);
         timer.Dispose();
 
         Console.ReadLine();
 
     }
- 
 
+    static void RunTasks()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            Task.Factory.StartNew(() => ShowLoadingProgress(0), CancellationToken.None, TaskCreationOptions.None, scheduler).Wait();
+            Task.Factory.StartNew(() => SearchStudent(0), CancellationToken.None, TaskCreationOptions.None, scheduler).Wait();
+        }
+    }
     static void ShowLoadingProgress(object _)
     {
         Console.Write("Loading ");
@@ -83,7 +73,7 @@ class Program
 
 static void SearchStudent(object _)
     {
-        int studentNumber = -9;
+        int studentNumber = 458;
         Console.WriteLine($"Search task ID: {Task.CurrentId}, Thread ID: {Thread.CurrentThread.ManagedThreadId}, iz pula potokov {Thread.CurrentThread.IsThreadPoolThread}");
 
         foreach (var student in students)

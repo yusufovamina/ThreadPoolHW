@@ -18,7 +18,7 @@ namespace ThreadPoolHW
             new Thread(() => TryExecuteTask(task)) { IsBackground = true }.Start();
         }
 
-        public override bool TryExecuteTaskInline(Task task, bool taskWasPreviouslyQueued)
+        protected override bool TryExecuteTaskInline(Task task, bool taskWasPreviouslyQueued)
         {
             return TryExecuteTask(task);
         }
